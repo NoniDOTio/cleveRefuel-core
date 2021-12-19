@@ -1,3 +1,3 @@
-from process_weekdays import showPlot
+from process_daytimes import main
 
-showPlot()
+main()
