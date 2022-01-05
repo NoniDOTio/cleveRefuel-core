@@ -10,7 +10,7 @@ data Die Tankstellen wie sie abzufahren sind. columns: ['time', 'fuel-station']
 fuel_tank_size Die Groesse des Treibstofftanks
 """
 class RouteData:
-    def __init__(self, route_path) -> None:
+    def __init__(self, route_path : str) -> None:
         self.path = route_path
 
         self.raw_data = pd.read_csv(
