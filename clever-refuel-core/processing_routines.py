@@ -15,10 +15,15 @@ class BaseProcessingType:
 class AnalyzeWithNaiveForecast(BaseProcessingType):
 
     def run(route_data: RouteData) -> bool:
-        # TODO Analyze stuff
-        # Aktuell tanken wir bei allen Tankstellen 1. Liter, muss noch angepasst werden
         forecast = NaiveForecasts()
 
         calculate_naively(route_data, forecast)
-        calculate_using_fixed_path_gas_station_problem_algorithm(route_data)
+        return True
+
+class AnalyzeWithFixedPathGasStationProblem(BaseProcessingType):
+
+    def run(route_data: RouteData) -> bool:
+        forecast = NaiveForecasts()
+
+        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
         return True
