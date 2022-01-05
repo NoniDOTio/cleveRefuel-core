@@ -1,5 +1,5 @@
 from data_reader import DataReader
-from route_data import RouteData
+from model.route_data import RouteData
 import processing_routines as pr
 
 class Menu:

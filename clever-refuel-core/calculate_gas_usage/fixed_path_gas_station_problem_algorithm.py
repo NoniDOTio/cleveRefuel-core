@@ -1,4 +1,4 @@
-from route_data import RouteData
+from model.route_data import RouteData
 
 # Constants
 GAS_PER_KILOMETER = 0.056

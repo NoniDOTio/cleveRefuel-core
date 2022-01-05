@@ -1,4 +1,4 @@
-from route_data import RouteData
+from model.route_data import RouteData
 from calculate_gas_usage.distance_utils import distance_between
 from calculate_gas_usage.constants import GAS_PER_KILOMETER
 from forecast.naive import NaiveForecasts

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from model.gas_station_meta import GasStationMeta
-from route_data import RouteData
+from model.route_data import RouteData
 from model.tank_stop import TankStop
 
 
