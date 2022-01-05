@@ -25,4 +25,5 @@ class RouteData:
         self.data['fuel-station'] = self.data['fuel-station'].map(
             lambda station: int(station)
         )
-        self.fuel_tank_size = self.raw_data['time'][0]
+        self.fuel_tank_size = float(self.raw_data['time'][0])
+        self.stops = []
