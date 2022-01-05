@@ -26,7 +26,10 @@ class Menu:
         for route_index, route_name in enumerate(all_routes):
             print("(", route_index + 1, ") ", route_name)
         print()
-        selected = int(input("Welche Route moechtest du verwenden?\n")) - 1
+        selected = self.get_user_input_int(
+            "Welche Route moechtest du verwenden?",
+            len(all_routes)
+        ) - 1
         print()
         selected_route = all_routes[selected]
         return self.data_reader.get_route_data(selected_route)
@@ -37,6 +40,19 @@ class Menu:
         for option_index, option_name in enumerate(self.options.keys()):
             print("(", option_index + 1, ") ", option_name)
         print()
-        selected = int(input("Wie soll die verwendete Route verarbeitet werden?\n")) - 1
+        selected = self.get_user_input_int(
+            "Wie soll die verwendete Route verarbeitet werden?",
+            len(list(self.options.keys()))
+        ) - 1
         print()
         return self.options[list(self.options.keys())[selected]]
+
+    def get_user_input_int(self, prompt, upper_bound) -> int:
+        selected = 0
+        while selected <= 0 or selected > upper_bound:
+            raw_user_input = input(f"{prompt}\n")
+            if raw_user_input.isdigit():
+                selected = int(raw_user_input)
+            else:
+                print("Bitte gib eine Zahl ein")
+        return selected

@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 from route_data import RouteData
-from naive_forecast.core import NaiveForecasts
+from forecast.naive import NaiveForecasts
 
 class BaseProcessingType:
     @abstractmethod
