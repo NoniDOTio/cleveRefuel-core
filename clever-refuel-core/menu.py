@@ -2,7 +2,13 @@ from data_reader import DataReader
 from model.route_data import RouteData
 import processing_routines as pr
 
+"""
+Das Menu ermoeglicht dem Benutzer die Tankstrategie sowie die route zu waehlen.
+"""
 class Menu:
+    """
+    Einstiegspunkt des Programms. Fragt den Benututzer nach der Art und weise wie er das Programm ausfuehren moechte.
+    """
     def __init__(self) -> None:
         self.data_reader = DataReader()
         self.options = {
@@ -22,7 +28,10 @@ class Menu:
         if not processing_type.run(route_data):
             print("Huch da ist bei der Verarbeitung was falsch gelaufen")
 
-
+    """
+    Fragt den Nutzer welche Route er ausfuehren moechte. Routen werden im
+    `data/Fahrzeugrouten` ordner gespeichert
+    """
     def get_route(self) -> RouteData:
         print("---- Routen Auswahl ----")
         all_routes = self.data_reader.get_all_routes()
@@ -37,7 +46,9 @@ class Menu:
         selected_route = all_routes[selected]
         return self.data_reader.get_route_data(selected_route)
 
-
+    """
+    Fragt dem Nutzer wie er die gewaehlte Rute analysieren moechte.
+    """
     def get_processing_type(self) -> pr.BaseProcessingType:
         print("---- Auswertungsverfahren Auswahl ----")
         for option_index, option_name in enumerate(self.options.keys()):
@@ -50,6 +61,10 @@ class Menu:
         print()
         return self.options[list(self.options.keys())[selected]]
 
+    """
+    Fragt dem Nutzer mit der gegebenen Prompt nach einer Zahleneingabe zwischen
+    0 und der gegebenen Obergrenze.
+    """
     def get_user_input_int(self, prompt, upper_bound) -> int:
         selected = 0
         while selected <= 0 or selected > upper_bound:
