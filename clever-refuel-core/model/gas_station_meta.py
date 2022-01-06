@@ -1,3 +1,6 @@
+"""
+Repräsentiert weitere Informationen zu einer Tankstelle
+"""
 class GasStationMeta:
     name: str
     brand: str
