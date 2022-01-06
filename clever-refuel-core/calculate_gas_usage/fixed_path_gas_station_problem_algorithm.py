@@ -17,7 +17,7 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
     # Get necessary data
     for i in range(0, len(route.stops) - 1):
         # Store price prediction
-        forecasted_price = forecast.get_forecast_for(route.stops[i].id)
+        forecasted_price = forecast.get_forecast_for(route.stops[i])
         prices.append(forecasted_price)
 
         # Store distance to following stop, except for last stop
