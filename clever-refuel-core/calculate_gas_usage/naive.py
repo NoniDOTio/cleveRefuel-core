@@ -4,6 +4,9 @@ from calculate_gas_usage.constants import GAS_PER_KILOMETER
 from forecast.base_forecast import BaseForecast
 
 
+"""
+Durchläuft eine Fahrzeugroute und schlägt eine naive Tankstrategie vor
+"""
 def calculate_naively(route: RouteData, forecast: BaseForecast) -> None:
     max_possible_distance = route.fuel_tank_size / GAS_PER_KILOMETER
     money_spent_on_refueling = 0
