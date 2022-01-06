@@ -2,7 +2,9 @@ from datetime import datetime
 
 from .gas_station_meta import GasStationMeta
 
-
+"""
+Repräsentiert einen Knotenpunkt an dem getankt werden kann
+"""
 class TankStop:
     # Meta
     id: int
