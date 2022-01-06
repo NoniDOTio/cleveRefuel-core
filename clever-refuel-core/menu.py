@@ -8,7 +8,7 @@ class Menu:
         self.options = {
             "Analyze Naively" : pr.AnalyzeWithNaiveForecast,
             "Analyze using Fixed Path Gas Station Problem Algorithm with Naive Forecast" : pr.AnalyzeWithFixedPathGasStationProblem,
-            "Analyze using Fixed Path Gas Station Problem Algorithm with Brandwide Forecast" : pr.AnalyzeAlgorithmiclyWithFixedPathGasStationProblem,
+            "Analyze using Fixed Path Gas Station Problem Algorithm with Brandwide Forecast" : pr.AnalyzeBrandwideWithFixedPathGasStationProblem,
         }
         self.route_folder = "data/Fahrzeugrouten"
         print("---- Clever Refuel Core ----", end="\n\n\n")
