@@ -1,8 +1,10 @@
+import datetime
 import os
 import pandas as pd
 from model.gas_station_meta import GasStationMeta
 from model.route_data import RouteData
 from model.tank_stop import TankStop
+from model.gas_station_meta import GasStationMeta
 
 
 class DataReader:
@@ -13,7 +15,22 @@ class DataReader:
         self.fuel_station_folder = "data/Benzinpreise"
         self.route_folder = "data/Fahrzeugrouten"
         self.gas_stations_meta_file_path = "data/Tankstellen.csv"
-        self.gas_stations_meta_data = pd.DataFrame()
+        self.gas_stations_meta_data = pd.read_csv(
+            self.gas_stations_meta_file_path,
+            delimiter=";",
+            encoding="utf-8",
+            names=[
+                "id",
+                "name",
+                "brand",
+                "street",
+                "street-number",
+                "plz",
+                "city",
+                "lat",
+                "long"
+            ]
+        )
 
 
     def get_all_routes(self) -> list:
@@ -29,7 +46,7 @@ class DataReader:
         return route_data
 
 
-    def get_fuelstation_data(self, fuelstation_id) -> pd.DataFrame:
+    def get_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:
         data_path = self.fuel_station_folder + os.path.sep + str(fuelstation_id)
         data = pd.read_csv(data_path + ".csv", delimiter=";", names=["time", "price"])
         # Striping the last digit
@@ -38,26 +55,31 @@ class DataReader:
         )
         return data
 
+    def get_fuelstation_price_data_generator(self, fuelstations) -> pd.DataFrame:
+        done = 0
+        total = len(fuelstations)
+        for fuelstation in fuelstations:
+            print(f"Loading Price Data... {done}/{total}\r", end="")
+            done += 1
+            try:
+                dataframe = self.get_fuelstation_price_data(fuelstation)
+                yield dataframe.assign(fuelstation_id=fuelstation)
+            except:
+                yield pd.DataFrame(
+                    columns=['time', 'price', 'fuelstation_id']
+                )
+
+
+    def get_all_fuelstations_data(self, fuelstations : list) -> pd.DataFrame:
+        return pd.concat(self.get_fuelstation_price_data_generator(fuelstations))
+
+
+    def get_fuelstations_by_brand(self, brand : str) -> pd.DataFrame:
+        data = self.gas_stations_meta_data
+        return data.loc[data['brand'] == brand]
+
 
     def get_gas_station_meta(self, gas_station_id: int) -> GasStationMeta:
-        if self.gas_stations_meta_data.empty:
-            self.gas_stations_meta_data = pd.read_csv(
-                self.gas_stations_meta_file_path,
-                delimiter=";",
-                encoding="utf-8",
-                names=[
-                    "id",
-                    "name",
-                    "brand",
-                    "street",
-                    "street-number",
-                    "plz",
-                    "city",
-                    "lat",
-                    "long"
-                ]
-            )
-
         data = self.gas_stations_meta_data
         gas_station = data.loc[data['id'] == gas_station_id].iloc[0]
         return GasStationMeta(

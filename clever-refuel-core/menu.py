@@ -6,8 +6,9 @@ class Menu:
     def __init__(self) -> None:
         self.data_reader = DataReader()
         self.options = {
-            "Analyze with Native Forecast" : pr.AnalyzeWithNaiveForecast,
+            "Analyze Naively" : pr.AnalyzeWithNaiveForecast,
             "Analyze using Fixed Path Gas Station Problem Algorithm with Naive Forecast" : pr.AnalyzeWithFixedPathGasStationProblem,
+            "Analyze using Fixed Path Gas Station Problem Algorithm with Brandwide Forecast" : pr.AnalyzeAlgorithmiclyWithFixedPathGasStationProblem,
         }
         self.route_folder = "data/Fahrzeugrouten"
         print("---- Clever Refuel Core ----", end="\n\n\n")

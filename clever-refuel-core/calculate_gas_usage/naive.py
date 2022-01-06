@@ -1,10 +1,10 @@
 from model.route_data import RouteData
 from calculate_gas_usage.distance_utils import distance_between
 from calculate_gas_usage.constants import GAS_PER_KILOMETER
-from forecast.naive_forecast import NaiveForecasts
+from forecast.base_forecast import BaseForecast
 
 
-def calculate_naively(route: RouteData, forecast: NaiveForecasts) -> None:
+def calculate_naively(route: RouteData, forecast: BaseForecast) -> None:
     max_possible_distance = route.fuel_tank_size / GAS_PER_KILOMETER
     money_spent_on_refueling = 0
     total_refueled = 0
