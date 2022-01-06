@@ -4,6 +4,9 @@ from calculate_gas_usage.constants import GAS_PER_KILOMETER
 from forecast.base_forecast import BaseForecast
 
 
+"""
+Durchläuft eine Fahrzeugroute und schlägt eine optimale Tankstrategie vor
+"""
 def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, forecast: BaseForecast) -> None:
     max_possible_distance = route.fuel_tank_size / GAS_PER_KILOMETER
     prices = []
