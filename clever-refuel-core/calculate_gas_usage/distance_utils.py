@@ -3,7 +3,9 @@ import math
 from model.tank_stop import TankStop
 from model.gas_station_meta import GasStationMeta
 
-
+"""
+Errechnet Abstand zwischen zwei TankStops
+"""
 def distance_between(stop_a: TankStop, stop_b: TankStop) -> float:
     stop_a_meta: GasStationMeta = stop_a.meta
     stop_b_meta: GasStationMeta = stop_b.meta
