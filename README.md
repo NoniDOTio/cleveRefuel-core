@@ -2,13 +2,15 @@
 
 [Aufgabenstellung](intellitank.pdf)
 
+> Abgabe von Nils Schulz und Arne Perschke
+
 # Installation dieser Implementierung
 
 Zur Verwendung der Implementierung wird Python3 mit einigen zusätzlichen Modulen verwendet. Zur Installation als aller erstes Python3 Von der Website herunterladen:
 
 https://www.python.org/downloads/
 
-Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projectverzeichnis öffnen und den folgenden Befehl ausführen:
+Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projektverzeichnis öffnen und den folgenden Befehl ausführen:
 
 `pip install -r requirements.txt`
 
