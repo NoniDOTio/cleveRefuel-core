@@ -5,3 +5,4 @@ Der Clever Refuel Core ermöglicht das ermitteln einer Optimalen Tank Strategie 
 Genauere Informationen zu...
 * [Tankstrategie](refueling_strategy.md)
 * [Forecast](forecast.md)
+

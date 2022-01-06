@@ -1,0 +1,367 @@
+Index: clever-refuel-core/__main__.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import menu\r\n\r\nmenu.Menu()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/__main__.py b/clever-refuel-core/__main__.py
+--- a/clever-refuel-core/__main__.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/__main__.py	(date 1641464744026)
+@@ -1,3 +1,6 @@
+ import menu
+ 
++"""
++Startet das Menu :>
++"""
+ menu.Menu()
+\ No newline at end of file
+Index: clever-refuel-core/forecast/base_forecast.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from abc import abstractclassmethod\r\nfrom data_reader import DataReader\r\nfrom model.tank_stop import TankStop\r\n\r\nclass BaseForecast:\r\n    def __init__(self) -> None:\r\n        self.data_reader = DataReader()\r\n\r\n    @abstractclassmethod\r\n    def get_forecast_for(self, fuel_stop: TankStop) -> int:\r\n        pass
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/forecast/base_forecast.py b/clever-refuel-core/forecast/base_forecast.py
+--- a/clever-refuel-core/forecast/base_forecast.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/forecast/base_forecast.py	(date 1641464744028)
+@@ -1,11 +1,19 @@
+-from abc import abstractclassmethod
++from abc import abstractmethod
+ from data_reader import DataReader
+ from model.tank_stop import TankStop
+ 
++"""
++Ist die Grundlage aller Forecasting Klassen. Forecasting Klassen ermoeglichen
++das abschaetzen von Spritpreisen.
++"""
+ class BaseForecast:
+     def __init__(self) -> None:
+         self.data_reader = DataReader()
+ 
+-    @abstractclassmethod
++    """
++    Versucht den Preis fuer den gegebenen Tankstop abzuschaetzen. Der Preis wird
++    in ct zurueckgegeben.
++    """
++    @abstractmethod
+     def get_forecast_for(self, fuel_stop: TankStop) -> int:
+         pass
+\ No newline at end of file
+Index: clever-refuel-core/processing_routines.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\nfrom abc import abstractmethod\r\nfrom model.route_data import RouteData\r\nfrom forecast.naive_forecast import NaiveForecasts\r\nfrom forecast.brandwide_forecast import BrandwideForecasts\r\n\r\nfrom calculate_gas_usage.fixed_path_gas_station_problem_algorithm import *\r\nfrom calculate_gas_usage.naive import *\r\n\r\n\r\nclass BaseProcessingType:\r\n    @abstractmethod\r\n    def run(route_data : RouteData) -> bool:\r\n        return False\r\n\r\nclass AnalyzeWithNaiveForecastOnNaiveRoute(BaseProcessingType):\r\n\r\n    def run(route_data: RouteData) -> bool:\r\n        forecast = NaiveForecasts()\r\n\r\n        calculate_naively(route_data, forecast)\r\n        return True\r\n\r\nclass AnalyzeWithBrandwideForecastOnNaiveRoute(BaseProcessingType):\r\n\r\n    def run(route_data: RouteData) -> bool:\r\n        forecast = BrandwideForecasts()\r\n\r\n        calculate_naively(route_data, forecast)\r\n        return True\r\n\r\nclass AnalyzeWithFixedPathGasStationProblem(BaseProcessingType):\r\n\r\n    def run(route_data: RouteData) -> bool:\r\n        forecast = NaiveForecasts()\r\n\r\n        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)\r\n        return True\r\n\r\nclass AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):\r\n\r\n    def run(route_data: RouteData) -> bool:\r\n        forecast = BrandwideForecasts()\r\n\r\n        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)\r\n        return True
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/processing_routines.py b/clever-refuel-core/processing_routines.py
+--- a/clever-refuel-core/processing_routines.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/processing_routines.py	(date 1641464744030)
+@@ -7,12 +7,20 @@
+ from calculate_gas_usage.fixed_path_gas_station_problem_algorithm import *
+ from calculate_gas_usage.naive import *
+ 
+-
++"""
++Grundlage fuer alle Processing Typen. Jeder Processing type stellt einen
++Menupunkt dar der ausgefuehrt werden kann.
++"""
+ class BaseProcessingType:
+     @abstractmethod
+     def run(route_data : RouteData) -> bool:
+         return False
+ 
++"""
++Analysiert die vom Nutzer gegebene Route mit einem Naiven Forecast auf naive
++weise. hierbei wird der Durchschnittspreis der Tankstelle immer getankt wenn der
++Tank nicht mehr bis zum naechsten Stop reicht
++"""
+ class AnalyzeWithNaiveForecastOnNaiveRoute(BaseProcessingType):
+ 
+     def run(route_data: RouteData) -> bool:
+@@ -21,6 +29,11 @@
+         calculate_naively(route_data, forecast)
+         return True
+ 
++"""
++Analysiert die vom Nutzer gegebene Route mit einem Brandwide Forecast auf naive
++weise. hierbei wird der Durchschnittspreis der Marke immer getankt wenn der
++Tank nicht mehr bis zum naechsten Stop reicht
++"""
+ class AnalyzeWithBrandwideForecastOnNaiveRoute(BaseProcessingType):
+ 
+     def run(route_data: RouteData) -> bool:
+@@ -29,6 +42,11 @@
+         calculate_naively(route_data, forecast)
+         return True
+ 
++"""
++Analysiert die vom Nutzer gegebene Route mit einem Naiven Forecast mithilfe
++des Fixed path gas station problem algorithm. Hierbei wird der Durchschnittspreis
++der Tankstelle an den optimalen Tankstellen getankt.
++"""
+ class AnalyzeWithFixedPathGasStationProblem(BaseProcessingType):
+ 
+     def run(route_data: RouteData) -> bool:
+@@ -37,6 +55,11 @@
+         calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+         return True
+ 
++"""
++Analysiert die vom Nutzer gegebene Route mit einem Naiven Forecast mithilfe
++des Fixed path gas station problem algorithm. Hierbei wird der Durchschnittspreis
++der Marke an den optimalen Tankstellen getankt.
++"""
+ class AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):
+ 
+     def run(route_data: RouteData) -> bool:
+Index: clever-refuel-core/forecast/brandwide_forecast.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pandas as pd\r\nfrom model.tank_stop import TankStop\r\nfrom forecast.base_forecast import BaseForecast\r\nfrom model.gas_station_meta import GasStationMeta\r\n\r\nclass BrandwideForecasts(BaseForecast):\r\n\r\n    def __init__(self) -> None:\r\n        self.brand_price_cache = {}\r\n        super().__init__()\r\n\r\n    def get_forecast_for(self, fuel_stop: TankStop) -> int:\r\n        price_data = self.get_price_data(fuel_stop)\r\n        return round(\r\n            price_data['price'].mean()\r\n        )\r\n\r\n    def get_brand_price_data(self, brand : str)->pd.DataFrame:\r\n        try:\r\n            return self.brand_price_cache[brand]\r\n        except:\r\n            print(f\"Price Data not in cache, loading prices...\")\r\n            fuel_stations = self.data_reader.get_fuelstations_by_brand(brand)\r\n            price_data = self.data_reader.get_all_fuelstations_data(fuel_stations['id'].tolist())\r\n            self.brand_price_cache[brand] = price_data\r\n            print(f\"\\nDone!\")\r\n            return self.brand_price_cache[brand]\r\n\r\n\r\n    def get_price_data(self, fuel_stop : TankStop) -> pd.DataFrame:\r\n        price_data = self.get_brand_price_data(fuel_stop.meta.brand)\r\n        return price_data\r\n\r\n\r\n    def stop_is_at_night(self, fuel_stop : TankStop) -> bool:\r\n        return fuel_stop.timestamp.hour <= 6 or fuel_stop.timestamp.hour > 18\r\n\r\n\r\n    def get_cache_key(self, fuel_stop : TankStop) -> str:\r\n        day_night = \"day\"\r\n        if self.stop_is_at_night(fuel_stop):\r\n            day_night = \"night\"\r\n        return f\"{day_night}-{fuel_stop.meta.brand}\"
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/forecast/brandwide_forecast.py b/clever-refuel-core/forecast/brandwide_forecast.py
+--- a/clever-refuel-core/forecast/brandwide_forecast.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/forecast/brandwide_forecast.py	(date 1641464744028)
+@@ -1,20 +1,30 @@
++import datetime
+ import pandas as pd
+ from model.tank_stop import TankStop
+ from forecast.base_forecast import BaseForecast
+-from model.gas_station_meta import GasStationMeta
+ 
++"""
++Ermoeglicht das Abschaetzen zukuenftiger Preise.
++"""
+ class BrandwideForecasts(BaseForecast):
+ 
+     def __init__(self) -> None:
+         self.brand_price_cache = {}
+         super().__init__()
+ 
++    """
++    Sucht nach dem vermuteten Preis am angegebenen Tankstop.
++    """
+     def get_forecast_for(self, fuel_stop: TankStop) -> int:
+         price_data = self.get_price_data(fuel_stop)
+         return round(
+             price_data['price'].mean()
+         )
+ 
++    """
++    Gibt alle Preispunkte zurueck die fuer die gegebene Marke ermittelt werden
++    koennen.
++    """
+     def get_brand_price_data(self, brand : str)->pd.DataFrame:
+         try:
+             return self.brand_price_cache[brand]
+@@ -22,22 +32,34 @@
+             print(f"Price Data not in cache, loading prices...")
+             fuel_stations = self.data_reader.get_fuelstations_by_brand(brand)
+             price_data = self.data_reader.get_all_fuelstations_data(fuel_stations['id'].tolist())
++            # TODO make the time casting ... faster
++            print("\nBuilding time values...")
++            price_data['hour'] = price_data['time'].apply(
++                lambda time: datetime.datetime.strptime(time + "00", '%Y-%m-%d %H:%M:%S%z'
++            ).hour)
+             self.brand_price_cache[brand] = price_data
+             print(f"\nDone!")
+             return self.brand_price_cache[brand]
+ 
+-
++    """
++    Gibt alle Preispunkte zurueck welche an speziel an dem gegebenen Tankstop
++    wichtig sind.
++    """
+     def get_price_data(self, fuel_stop : TankStop) -> pd.DataFrame:
+         price_data = self.get_brand_price_data(fuel_stop.meta.brand)
++        # Only keeping price data within our time range
++        if self.stop_is_at_night(fuel_stop):
++            early_data = price_data.loc[price_data['hour'] <= 6]
++            late_data = price_data.loc[price_data['hour'] > 18]
++            price_data = pd.concat(early_data, late_data)
++        else:
++            price_data = price_data.loc[price_data['hour'] > 6]
++            price_data = price_data.loc[price_data['hour'] <= 18]
+         return price_data
+ 
+-
++    """
++    Tested ob der gegebene Tankstop nachts liegt oder nicht. Nachts ist zwischen
++    18 uhr abends und 6 uhr morgens
++    """
+     def stop_is_at_night(self, fuel_stop : TankStop) -> bool:
+-        return fuel_stop.timestamp.hour <= 6 or fuel_stop.timestamp.hour > 18
+-
+-
+-    def get_cache_key(self, fuel_stop : TankStop) -> str:
+-        day_night = "day"
+-        if self.stop_is_at_night(fuel_stop):
+-            day_night = "night"
+-        return f"{day_night}-{fuel_stop.meta.brand}"
+\ No newline at end of file
++        return fuel_stop.timestamp.hour <= 6 or fuel_stop.timestamp.hour > 18
+\ No newline at end of file
+Index: clever-refuel-core/forecast/naive_forecast.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from model.tank_stop import TankStop\r\nfrom forecast.base_forecast import BaseForecast\r\n\r\nclass NaiveForecasts(BaseForecast):\r\n    def get_forecast_for(self, fuel_stop: TankStop) -> int:\r\n        return round(\r\n            self.data_reader.get_fuelstation_price_data(fuel_stop.id)['price'].mean()\r\n        )
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/forecast/naive_forecast.py b/clever-refuel-core/forecast/naive_forecast.py
+--- a/clever-refuel-core/forecast/naive_forecast.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/forecast/naive_forecast.py	(date 1641464744029)
+@@ -1,6 +1,10 @@
+ from model.tank_stop import TankStop
+ from forecast.base_forecast import BaseForecast
+ 
++"""
++Gibt grob abgeschaetzt zurueck wie hoch die Preise am gegebenen Tankstop sind.
++Zur abschaetzung wird der Durchschnitt aller bekannten Preispunkte genommen.
++"""
+ class NaiveForecasts(BaseForecast):
+     def get_forecast_for(self, fuel_stop: TankStop) -> int:
+         return round(
+Index: clever-refuel-core/data_reader.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport pandas as pd\r\nfrom model.gas_station_meta import GasStationMeta\r\nfrom model.route_data import RouteData\r\nfrom model.tank_stop import TankStop\r\nfrom model.gas_station_meta import GasStationMeta\r\n\r\n\r\nclass DataReader:\r\n    gas_stations_meta_data : pd.DataFrame\r\n\r\n\r\n    def __init__(self) -> None:\r\n        base_path = \"data\"\r\n\r\n        if os.path.exists(\"informaticup-data/Eingabedaten\"):\r\n            base_path = \"informaticup-data/Eingabedaten\"\r\n\r\n        self.fuel_station_folder = f\"{base_path}/Benzinpreise\"\r\n        self.route_folder = \"data/Fahrzeugrouten\"\r\n        self.gas_stations_meta_file_path = f\"{base_path}/Tankstellen.csv\"\r\n        self.gas_stations_meta_data = pd.read_csv(\r\n            self.gas_stations_meta_file_path,\r\n            delimiter=\";\",\r\n            encoding=\"utf-8\",\r\n            names=[\r\n                \"id\",\r\n                \"name\",\r\n                \"brand\",\r\n                \"street\",\r\n                \"street-number\",\r\n                \"plz\",\r\n                \"city\",\r\n                \"lat\",\r\n                \"long\"\r\n            ]\r\n        )\r\n\r\n\r\n    def get_all_routes(self) -> list:\r\n        return os.listdir(self.route_folder)\r\n\r\n\r\n    def get_route_data(self, route) -> RouteData:\r\n        route_data = RouteData(self.route_folder + os.path.sep + route)\r\n        for index, row in route_data.data.iterrows():\r\n            stop = TankStop(row['time'], row['fuel-station'])\r\n            stop.meta = self.get_gas_station_meta(stop.id)\r\n            route_data.stops.append(stop)\r\n        return route_data\r\n\r\n\r\n    def get_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:\r\n        data_path = self.fuel_station_folder + os.path.sep + str(fuelstation_id)\r\n        data = pd.read_csv(data_path + \".csv\", delimiter=\";\", names=[\"time\", \"price\"])\r\n        # Striping the last digit\r\n        data['price'] = data['price'].apply(\r\n            lambda price: int(price/10)\r\n        )\r\n        return data\r\n\r\n    def get_fuelstation_price_data_generator(self, fuelstations) -> pd.DataFrame:\r\n        done = 0\r\n        total = len(fuelstations)\r\n        for fuelstation in fuelstations:\r\n            done += 1\r\n            print(f\"Loading Price Data... {done}/{total}\\r\", end=\"\")\r\n            try:\r\n                dataframe = self.get_fuelstation_price_data(fuelstation)\r\n                yield dataframe.assign(fuelstation_id=fuelstation)\r\n            except:\r\n                yield pd.DataFrame(\r\n                    columns=['time', 'price', 'fuelstation_id']\r\n                )\r\n\r\n\r\n    def get_all_fuelstations_data(self, fuelstations : list) -> pd.DataFrame:\r\n        if (len(fuelstations) == 0):\r\n            return pd.DataFrame(columns=['time', 'price', 'fuelstation_id'])\r\n        return pd.concat(self.get_fuelstation_price_data_generator(fuelstations))\r\n\r\n\r\n    def get_fuelstations_by_brand(self, brand : str) -> pd.DataFrame:\r\n        data = self.gas_stations_meta_data\r\n        return data.loc[data['brand'] == brand]\r\n\r\n\r\n    def get_gas_station_meta(self, gas_station_id: int) -> GasStationMeta:\r\n        data = self.gas_stations_meta_data\r\n        gas_station = data.loc[data['id'] == gas_station_id].iloc[0]\r\n        return GasStationMeta(\r\n            gas_station['name'],\r\n            gas_station['brand'],\r\n            gas_station['street'],\r\n            gas_station['street-number'],\r\n            gas_station['plz'],\r\n            gas_station['city'],\r\n            gas_station['lat'],\r\n            gas_station['long'],\r\n        )\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/clever-refuel-core/data_reader.py b/clever-refuel-core/data_reader.py
+--- a/clever-refuel-core/data_reader.py	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/clever-refuel-core/data_reader.py	(date 1641464744028)
+@@ -5,11 +5,14 @@
+ from model.tank_stop import TankStop
+ from model.gas_station_meta import GasStationMeta
+ 
+-
++"""
++Kuemmert sich um das Einlesen der Dateien.
++"""
+ class DataReader:
+-    gas_stations_meta_data : pd.DataFrame
+-
+-
++    """
++    Initialisiert einen neuen DataReader und liest die Metadaten der Tankstellen
++    ein.
++    """
+     def __init__(self) -> None:
+         base_path = "data"
+ 
+@@ -36,11 +39,15 @@
+             ]
+         )
+ 
+-
++    """
++    Gibt alle Routen zurueck die fuer die Anwendung hinterlegt sind
++    """
+     def get_all_routes(self) -> list:
+         return os.listdir(self.route_folder)
+ 
+-
++    """
++    Liest die Daten fuer die gegebene Route ein und gibt diese als zurueck
++    """
+     def get_route_data(self, route) -> RouteData:
+         route_data = RouteData(self.route_folder + os.path.sep + route)
+         for index, row in route_data.data.iterrows():
+@@ -49,7 +56,10 @@
+             route_data.stops.append(stop)
+         return route_data
+ 
+-
++    """
++    Liest die Preise fuer die gegebene Tankstelle ein und gibt diese unbehandelt
++    zurueck.
++    """
+     def get_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:
+         data_path = self.fuel_station_folder + os.path.sep + str(fuelstation_id)
+         data = pd.read_csv(data_path + ".csv", delimiter=";", names=["time", "price"])
+@@ -59,7 +69,11 @@
+         )
+         return data
+ 
+-    def get_fuelstation_price_data_generator(self, fuelstations) -> pd.DataFrame:
++    """
++    Gibt einen Generator zurueck welcher die Daten aller gegebenen tankstellen
++    enthaelt.
++    """
++    def get_fuelstation_price_data_generator(self, fuelstations : list) -> pd.DataFrame:
+         done = 0
+         total = len(fuelstations)
+         for fuelstation in fuelstations:
+@@ -73,18 +87,26 @@
+                     columns=['time', 'price', 'fuelstation_id']
+                 )
+ 
+-
++    """
++    Gibt ein Dataframe zurueck welches die Daten aller gegebenen Tankstellen
++    enthaelt.
++    """
+     def get_all_fuelstations_data(self, fuelstations : list) -> pd.DataFrame:
+         if (len(fuelstations) == 0):
+             return pd.DataFrame(columns=['time', 'price', 'fuelstation_id'])
++        # Generieren des Dataframes für die Optimale Performance
+         return pd.concat(self.get_fuelstation_price_data_generator(fuelstations))
+ 
+-
++    """
++    Gibt alle Tankstellen zurueck welche von der gegebenen Marke sind.
++    """
+     def get_fuelstations_by_brand(self, brand : str) -> pd.DataFrame:
+         data = self.gas_stations_meta_data
+         return data.loc[data['brand'] == brand]
+ 
+-
++    """
++    Parsed die Metadaten fuer die gegebene Tankstelle und gibt diese zurueck.
++    """
+     def get_gas_station_meta(self, gas_station_id: int) -> GasStationMeta:
+         data = self.gas_stations_meta_data
+         gas_station = data.loc[data['id'] == gas_station_id].iloc[0]
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Intelitank\r\n\r\n[Aufgabenstellung](intellitank.pdf)\r\n\r\n# Installation dieser Implementierung\r\n\r\nZur Verwendung der Implementierung wird Python3 mit einigen zusätzlichen Modulen verwendet. Zur Installation als aller erstes Python3 Von der Website herunterladen:\r\n\r\nhttps://www.python.org/downloads/\r\n\r\nNachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projectverzeichnis öffnen und den folgenden Befehl ausführen:\r\n\r\n`pip install -r requirements.txt`\r\n\r\nDanach sollten alle benötigten dependencies installiert sein und das Programm kann ausgeführt werden.\r\n\r\n## Installation des Erweiterten Datensatzes\r\nDas Repo kommt mit einem minimierten Datensatz der das ausführen der Anwendung ermöglicht. Bei Bedarf kann der komplette Datensatz der Informaticup Aufgabe (~3.5Gb) heruntergeladen werden. Mit dem größeren Datensatz ist die Ermittelte Tankstrategie genauer allerdings hat der Algorithmus je nach Optimierungsstrategie auch eine deutlich längere Laufzeit.\r\n\r\nZum Herunterladen den root ordner öffnen und den folgenden Befehl ausführen:\r\n\r\n`git submodule update --init`\r\n\r\nDas Programm verwendet Beim ausführen dann automatisch den erweiterten Datensatz.\r\n\r\n## Zusätzliche Routen hinzufügen\r\nDas Repository kommt mit zwei vorgefertigten Routen, bei bedarf können weitere Routen im Ordner `data/Fahrzeugrouten` hinzugefügt werden. Die Routen werden beim ausführen des Programms automatisch eingelesen und können dann vom Nutzer ausgewählt werden.\r\n\r\n# Programm Ausführen\r\n\r\nZum Staren des Programms eine Eingabeaufforderung im geklonten Ordner öffnen und das Programm wie folgt starten:\r\n\r\n`python clever-refuel-core`\r\n\r\nNach dem Start wird dir ein Menu angezeigt in welchem du die zu verarbeitende Route sowie die Vorhersagemethode auswählen kannst.\r\n\r\n\r\n# Weitere Dokumentation\r\nTiefere Dokumentation kann [hier](doc/index.md) gefunden werden\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 0748d2a326be560e3fd5d099f8aea5a628af9b84)
++++ b/README.md	(date 1641464744026)
+@@ -2,13 +2,15 @@
+ 
+ [Aufgabenstellung](intellitank.pdf)
+ 
++> Abgabe von Nils Schulz und Arne Perschke
++
+ # Installation dieser Implementierung
+ 
+ Zur Verwendung der Implementierung wird Python3 mit einigen zusätzlichen Modulen verwendet. Zur Installation als aller erstes Python3 Von der Website herunterladen:
+ 
+ https://www.python.org/downloads/
+ 
+-Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projectverzeichnis öffnen und den folgenden Befehl ausführen:
++Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projektverzeichnis öffnen und den folgenden Befehl ausführen:
+ 
+ `pip install -r requirements.txt`
+ 
+@@ -23,6 +25,8 @@
+ 
+ Das Programm verwendet Beim ausführen dann automatisch den erweiterten Datensatz.
+ 
++Wenn der Erweiterte Datensatz wieder deinstalliert werden soll kann `git submodule deinit --all` benutzt werden
++
+ ## Zusätzliche Routen hinzufügen
+ Das Repository kommt mit zwei vorgefertigten Routen, bei bedarf können weitere Routen im Ordner `data/Fahrzeugrouten` hinzugefügt werden. Die Routen werden beim ausführen des Programms automatisch eingelesen und können dann vom Nutzer ausgewählt werden.
+ 

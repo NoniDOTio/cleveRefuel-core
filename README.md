@@ -2,13 +2,15 @@
 
 [Aufgabenstellung](intellitank.pdf)
 
+> Abgabe von Nils Schulz und Arne Perschke
+
 # Installation dieser Implementierung
 
 Zur Verwendung der Implementierung wird Python3 mit einigen zusätzlichen Modulen verwendet. Zur Installation als aller erstes Python3 Von der Website herunterladen:
 
 https://www.python.org/downloads/
 
-Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projectverzeichnis öffnen und den folgenden Befehl ausführen:
+Nachdem Python installiert ist müssen wir noch die Zusätzlichen Module installieren. Dafür einfach eine Eingabeaufforderung im Projektverzeichnis öffnen und den folgenden Befehl ausführen:
 
 `pip install -r requirements.txt`
 
@@ -22,6 +24,8 @@ Zum Herunterladen den root ordner öffnen und den folgenden Befehl ausführen:
 `git submodule update --init`
 
 Das Programm verwendet Beim ausführen dann automatisch den erweiterten Datensatz.
+
+Wenn der Erweiterte Datensatz wieder deinstalliert werden soll kann `git submodule deinit --all` benutzt werden
 
 ## Zusätzliche Routen hinzufügen
 Das Repository kommt mit zwei vorgefertigten Routen, bei bedarf können weitere Routen im Ordner `data/Fahrzeugrouten` hinzugefügt werden. Die Routen werden beim ausführen des Programms automatisch eingelesen und können dann vom Nutzer ausgewählt werden.

@@ -5,11 +5,14 @@ from model.route_data import RouteData
 from model.tank_stop import TankStop
 from model.gas_station_meta import GasStationMeta
 
-
+"""
+Kuemmert sich um das Einlesen der Dateien.
+"""
 class DataReader:
-    gas_stations_meta_data : pd.DataFrame
-
-
+    """
+    Initialisiert einen neuen DataReader und liest die Metadaten der Tankstellen
+    ein.
+    """
     def __init__(self) -> None:
         base_path = "data"
 
@@ -36,11 +39,15 @@ class DataReader:
             ]
         )
 
-
+    """
+    Gibt alle Routen zurueck die fuer die Anwendung hinterlegt sind
+    """
     def get_all_routes(self) -> list:
         return os.listdir(self.route_folder)
 
-
+    """
+    Liest die Daten fuer die gegebene Route ein und gibt diese als zurueck
+    """
     def get_route_data(self, route) -> RouteData:
         route_data = RouteData(self.route_folder + os.path.sep + route)
         for index, row in route_data.data.iterrows():
@@ -49,7 +56,10 @@ class DataReader:
             route_data.stops.append(stop)
         return route_data
 
-
+    """
+    Liest die Preise fuer die gegebene Tankstelle ein und gibt diese unbehandelt
+    zurueck.
+    """
     def get_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:
         data_path = self.fuel_station_folder + os.path.sep + str(fuelstation_id)
         data = pd.read_csv(data_path + ".csv", delimiter=";", names=["time", "price"])
@@ -59,7 +69,11 @@ class DataReader:
         )
         return data
 
-    def get_fuelstation_price_data_generator(self, fuelstations) -> pd.DataFrame:
+    """
+    Gibt einen Generator zurueck welcher die Daten aller gegebenen tankstellen
+    enthaelt.
+    """
+    def get_fuelstation_price_data_generator(self, fuelstations : list) -> pd.DataFrame:
         done = 0
         total = len(fuelstations)
         for fuelstation in fuelstations:
@@ -73,18 +87,26 @@ class DataReader:
                     columns=['time', 'price', 'fuelstation_id']
                 )
 
-
+    """
+    Gibt ein Dataframe zurueck welches die Daten aller gegebenen Tankstellen
+    enthaelt.
+    """
     def get_all_fuelstations_data(self, fuelstations : list) -> pd.DataFrame:
         if (len(fuelstations) == 0):
             return pd.DataFrame(columns=['time', 'price', 'fuelstation_id'])
+        # Generieren des Dataframes für die Optimale Performance
         return pd.concat(self.get_fuelstation_price_data_generator(fuelstations))
 
-
+    """
+    Gibt alle Tankstellen zurueck welche von der gegebenen Marke sind.
+    """
     def get_fuelstations_by_brand(self, brand : str) -> pd.DataFrame:
         data = self.gas_stations_meta_data
         return data.loc[data['brand'] == brand]
 
-
+    """
+    Parsed die Metadaten fuer die gegebene Tankstelle und gibt diese zurueck.
+    """
     def get_gas_station_meta(self, gas_station_id: int) -> GasStationMeta:
         data = self.gas_stations_meta_data
         gas_station = data.loc[data['id'] == gas_station_id].iloc[0]
