@@ -1,0 +1,3 @@
+[submodule "informaticup-data"]
+	path = informaticup-data
+	url = https://github.com/informatiCup/InformatiCup2018
