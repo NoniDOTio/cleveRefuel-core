@@ -63,8 +63,8 @@ class DataReader:
         done = 0
         total = len(fuelstations)
         for fuelstation in fuelstations:
-            print(f"Loading Price Data... {done}/{total}\r", end="")
             done += 1
+            print(f"Loading Price Data... {done}/{total}\r", end="")
             try:
                 dataframe = self.get_fuelstation_price_data(fuelstation)
                 yield dataframe.assign(fuelstation_id=fuelstation)
@@ -75,6 +75,8 @@ class DataReader:
 
 
     def get_all_fuelstations_data(self, fuelstations : list) -> pd.DataFrame:
+        if (len(fuelstations) == 0):
+            return pd.DataFrame(columns=['time', 'price', 'fuelstation_id'])
         return pd.concat(self.get_fuelstation_price_data_generator(fuelstations))
 
 
