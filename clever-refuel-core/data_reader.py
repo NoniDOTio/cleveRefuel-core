@@ -1,4 +1,3 @@
-import datetime
 import os
 import pandas as pd
 from model.gas_station_meta import GasStationMeta
@@ -12,9 +11,14 @@ class DataReader:
 
 
     def __init__(self) -> None:
-        self.fuel_station_folder = "data/Benzinpreise"
-        self.route_folder = "data/Fahrzeugrouten"
-        self.gas_stations_meta_file_path = "data/Tankstellen.csv"
+        base_path = "data"
+
+        if os.path.exists("informaticup-data/Eingabedaten"):
+            base_path = "informaticup-data/Eingabedaten"
+
+        self.fuel_station_folder = f"{base_path}/Benzinpreise"
+        self.route_folder = f"{base_path}/Fahrzeugrouten"
+        self.gas_stations_meta_file_path = f"{base_path}/Tankstellen.csv"
         self.gas_stations_meta_data = pd.read_csv(
             self.gas_stations_meta_file_path,
             delimiter=";",
