@@ -22,28 +22,13 @@ class BrandwideForecasts(BaseForecast):
             print(f"Price Data not in cache, loading prices...")
             fuel_stations = self.data_reader.get_fuelstations_by_brand(brand)
             price_data = self.data_reader.get_all_fuelstations_data(fuel_stations['id'].tolist())
-
-            # TODO make the time casting not suck
-            #print("\nBuilding time values...")
-            #price_data['hour'] = price_data['time'].apply(
-            #    lambda time: datetime.datetime.strptime(time + "00", '%Y-%m-%d %H:%M:%S%z'
-            #).hour)
             self.brand_price_cache[brand] = price_data
-            print(f"Done!")
+            print(f"\nDone!")
             return self.brand_price_cache[brand]
 
 
     def get_price_data(self, fuel_stop : TankStop) -> pd.DataFrame:
         price_data = self.get_brand_price_data(fuel_stop.meta.brand)
-        return price_data
-        # Only keeping price data within our time range
-        if self.stop_is_at_night(fuel_stop):
-            early_data = price_data.loc[price_data['hour'] <= 6]
-            late_data = price_data.loc[price_data['hour'] > 18]
-            price_data = pd.concat(early_data, late_data)
-        else:
-            price_data = price_data.loc[price_data['hour'] > 6]
-            price_data = price_data.loc[price_data['hour'] <= 18]
         return price_data
 
 
