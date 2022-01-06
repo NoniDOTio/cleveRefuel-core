@@ -34,7 +34,14 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
     # Loop through all gas stations starting from destination
     i = len(route.stops) - 2
     while i > 0:
-        print("Current stop", i)
+
+        # Break out of loop if destination is reachable
+        if sum(distances[0:i]) < max_possible_distance:
+            optimal_stops[0] = [
+                sum(distances[0:i]) * GAS_PER_KILOMETER,
+                prices[0] * (sum(distances[0:i]) * GAS_PER_KILOMETER)
+            ]
+            break
 
         # Loop through stations that are within max_possible_distance
         distance = 0
@@ -48,8 +55,6 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
                 cheapest_gas_station_index = j
                 cheapest_gas_station_distance = distance
 
-            print("Checking", j, "Distance:", distance, "Price:", prices[j])
-
             # Quit loop if max_possible_distance is exceeded
             if distance > max_possible_distance:
                 break
@@ -59,17 +64,25 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
                 cheapest_gas_station_index = j
                 cheapest_gas_station_distance = distance
 
-        # Debug
-        print("Cheapest gas station is", cheapest_gas_station_index)
-        print("Distance to it", cheapest_gas_station_distance)
-        print("")
-        print("")
-
-        optimal_stops[cheapest_gas_station_index] = prices[cheapest_gas_station_index] * (cheapest_gas_station_distance * GAS_PER_KILOMETER)
+        optimal_stops[cheapest_gas_station_index] = [
+                cheapest_gas_station_distance * GAS_PER_KILOMETER,
+                prices[cheapest_gas_station_index] * (cheapest_gas_station_distance * GAS_PER_KILOMETER)
+            ]
         i = cheapest_gas_station_index
 
     print(optimal_stops)
 
+    money_spent_on_refueling = 0
+    total_refueled = 0
+    for gas_station_id, data in reversed(optimal_stops.items()):
+        current_stop = route.stops[gas_station_id]
+        amount_to_refuel = data[0]
+        refuel_cost = data[1]
+        money_spent_on_refueling += refuel_cost
+        total_refueled += amount_to_refuel
 
+        print(current_stop.meta.name, "-->")
+        print("Refueling", round(amount_to_refuel, 2), "litres for", round(refuel_cost / 100, 2), "€")
+        print("")
 
-
+    print("Total refueled:", round(total_refueled, 2), "liters - Total money spend on refueling:", round(money_spent_on_refueling / 100, 2), "€")
