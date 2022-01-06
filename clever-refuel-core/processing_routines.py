@@ -13,10 +13,18 @@ class BaseProcessingType:
     def run(route_data : RouteData) -> bool:
         return False
 
-class AnalyzeWithNaiveForecast(BaseProcessingType):
+class AnalyzeWithNaiveForecastOnNaiveRoute(BaseProcessingType):
 
     def run(route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
+
+        calculate_naively(route_data, forecast)
+        return True
+
+class AnalyzeWithBrandwideForecastOnNaiveRoute(BaseProcessingType):
+
+    def run(route_data: RouteData) -> bool:
+        forecast = BrandwideForecasts()
 
         calculate_naively(route_data, forecast)
         return True
@@ -34,6 +42,5 @@ class AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):
     def run(route_data: RouteData) -> bool:
         forecast = BrandwideForecasts()
 
-        calculate_naively(route_data, forecast)
-        #calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
         return True
