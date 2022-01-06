@@ -25,6 +25,8 @@ Zum Herunterladen den root ordner öffnen und den folgenden Befehl ausführen:
 
 Das Programm verwendet Beim ausführen dann automatisch den erweiterten Datensatz.
 
+Wenn der Erweiterte Datensatz wieder deinstalliert werden soll kann `git submodule deinit --all` benutzt werden
+
 ## Zusätzliche Routen hinzufügen
 Das Repository kommt mit zwei vorgefertigten Routen, bei bedarf können weitere Routen im Ordner `data/Fahrzeugrouten` hinzugefügt werden. Die Routen werden beim ausführen des Programms automatisch eingelesen und können dann vom Nutzer ausgewählt werden.
 
