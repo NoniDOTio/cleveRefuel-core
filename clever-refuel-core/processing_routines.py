@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 from model.route_data import RouteData
-from forecast.naive import NaiveForecasts
+from forecast.naive_forecast import NaiveForecasts
 
 from calculate_gas_usage.fixed_path_gas_station_problem_algorithm import *
 from calculate_gas_usage.naive import *

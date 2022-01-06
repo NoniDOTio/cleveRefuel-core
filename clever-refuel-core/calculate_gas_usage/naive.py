@@ -1,7 +1,7 @@
 from model.route_data import RouteData
 from calculate_gas_usage.distance_utils import distance_between
 from calculate_gas_usage.constants import GAS_PER_KILOMETER
-from forecast.naive import NaiveForecasts
+from forecast.naive_forecast import NaiveForecasts
 
 
 def calculate_naively(route: RouteData, forecast: NaiveForecasts) -> None:
@@ -28,7 +28,7 @@ def calculate_naively(route: RouteData, forecast: NaiveForecasts) -> None:
 
         if current_fuel < fuel_to_next_stop:
             # Refuel to max tank capacity
-            price_prediction = forecast.get_forecast_for(current_stop.id)
+            price_prediction = forecast.get_forecast_for(current_stop)
             amount_to_refuel = route.fuel_tank_size - current_fuel
             refuel_cost = amount_to_refuel * price_prediction
             money_spent_on_refueling += refuel_cost

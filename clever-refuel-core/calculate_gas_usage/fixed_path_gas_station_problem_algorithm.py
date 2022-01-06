@@ -1,5 +1,5 @@
 from model.route_data import RouteData
-from forecast.naive import NaiveForecasts
+from forecast.naive_forecast import NaiveForecasts
 
 # Constants
 GAS_PER_KILOMETER = 0.056
