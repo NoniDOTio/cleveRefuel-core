@@ -47,6 +47,22 @@ class BaseProcessingType:
         print()
         print()
 
+    """
+    Fragt dem Nutzer mit der gegebenen Prompt nach einer Zahleneingabe zwischen
+    0 und der gegebenen Obergrenze.
+    """
+    def get_user_input_bool(self, prompt) -> bool:
+        while True:
+            print()
+            print(prompt)
+            user_input = input("(y) or (n)? ").lower()
+            print()
+            if user_input == "y":
+                return True
+            if user_input == "n":
+                return False
+
+
 """
 Analysiert die vom Nutzer gegebene Route mit einem Naiven Forecast auf naive
 weise. hierbei wird der Durchschnittspreis der Tankstelle immer getankt wenn der
@@ -56,6 +72,11 @@ class AnalyzeWithNaiveForecastOnNaiveRoute(BaseProcessingType):
 
     def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
+
+        print()
+        if self.get_user_input_bool("Consider day/night prices?"):
+            forecast.use_day_night_prices()
+        print()
 
         plan = calculate_naively(route_data, forecast)
         self.show_prediction_percision(plan)
@@ -85,6 +106,9 @@ class AnalyzeWithFixedPathGasStationProblem(BaseProcessingType):
     def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
 
+        if (self.get_user_input_bool("Consider day/night prices?")):
+            forecast.use_day_night_prices()
+
         plan = calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
         self.show_prediction_percision(plan)
         return True
@@ -110,6 +134,9 @@ class AnalyzeWithNewFixedPathGasStationProblem(BaseProcessingType):
 
     def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
+
+        if (self.get_user_input_bool("Consider day/night prices?")):
+            forecast.use_day_night_prices()
 
         plan = calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
         self.show_prediction_percision(plan)

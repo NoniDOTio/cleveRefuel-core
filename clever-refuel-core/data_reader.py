@@ -76,6 +76,9 @@ class DataReader:
         data['time'] = data['time'].apply(
             lambda time: datetime.datetime.strptime(time + "00", '%Y-%m-%d %H:%M:%S%z')
         )
+        data['hour'] = data['time'].apply(
+            lambda time: time.hour
+        )
         return data
 
     def get_known_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:
