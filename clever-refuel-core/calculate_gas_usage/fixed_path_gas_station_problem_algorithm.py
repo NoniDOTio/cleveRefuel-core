@@ -81,7 +81,7 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
 
         # Write to
         current_stop.amount_to_refuel = amount_to_refuel
-        current_stop.predicted_price_per_liter = amount_to_refuel * refuel_cost
+        current_stop.predicted_price_per_liter = refuel_cost / amount_to_refuel
         approached_stops.append(current_stop)
         print(current_stop.meta.name, "-->")
         print("Refueling", round(amount_to_refuel, 2), "litres for", round(refuel_cost / 100, 2), "€")
