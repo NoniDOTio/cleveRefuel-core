@@ -1,9 +1,14 @@
 import os
 import pandas as pd
+import datetime
+from pandarallel import pandarallel
 from model.gas_station_meta import GasStationMeta
 from model.route_data import RouteData
 from model.tank_stop import TankStop
 from model.gas_station_meta import GasStationMeta
+
+
+pandarallel.initialize()
 
 """
 Kuemmert sich um das Einlesen der Dateien.
@@ -19,6 +24,7 @@ class DataReader:
         if os.path.exists("informaticup-data/Eingabedaten"):
             base_path = "informaticup-data/Eingabedaten"
 
+        self.known_data_cutoff = datetime.datetime.strptime("2015-08-01 08:00:00+0200", '%Y-%m-%d %H:%M:%S%z')
         self.fuel_station_folder = f"{base_path}/Benzinpreise"
         self.route_folder = "data/Fahrzeugrouten"
         self.gas_stations_meta_file_path = f"{base_path}/Tankstellen.csv"
@@ -67,7 +73,19 @@ class DataReader:
         data['price'] = data['price'].apply(
             lambda price: int(price/10)
         )
+        data['time'] = data['time'].apply(
+            lambda time: datetime.datetime.strptime(time + "00", '%Y-%m-%d %H:%M:%S%z')
+        )
         return data
+
+    def get_known_fuelstation_price_data(self, fuelstation_id) -> pd.DataFrame:
+        data = self.get_fuelstation_price_data(fuelstation_id)
+        return data.loc[data['time'] < self.known_data_cutoff]
+
+    def get_fuelstation_price_data_at_time(self, fuelstation_id : int, time : datetime) -> int:
+        data = self.get_fuelstation_price_data(fuelstation_id)
+        data_before_datetime = data.loc[data['time'] < time]
+        return data_before_datetime.iloc[-1]['price']
 
     """
     Gibt einen Generator zurueck welcher die Daten aller gegebenen tankstellen
@@ -80,7 +98,7 @@ class DataReader:
             done += 1
             print(f"Loading Price Data... {done}/{total}\r", end="")
             try:
-                dataframe = self.get_fuelstation_price_data(fuelstation)
+                dataframe = self.get_known_fuelstation_price_data(fuelstation)
                 yield dataframe.assign(fuelstation_id=fuelstation)
             except:
                 yield pd.DataFrame(
