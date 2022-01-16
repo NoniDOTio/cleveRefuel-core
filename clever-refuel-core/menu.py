@@ -16,6 +16,8 @@ class Menu:
             "Analyze with Brandwide Forecast on Naive Route" : pr.AnalyzeWithBrandwideForecastOnNaiveRoute,
             "Analyze using Fixed Path Gas Station Problem Algorithm with Naive Forecast" : pr.AnalyzeWithFixedPathGasStationProblem,
             "Analyze using Fixed Path Gas Station Problem Algorithm with Brandwide Forecast" : pr.AnalyzeBrandwideWithFixedPathGasStationProblem,
+            "Analyze using New Fixed Path Gas Station Problem Algorithm with Naive Forecast" : pr.AnalyzeWithNewFixedPathGasStationProblem,
+            "Analyze using New Fixed Path Gas Station Problem Algorithm with Brandwide Forecast" : pr.AnalyzeBrandwideWithNewFixedPathGasStationProblem,
         }
         self.route_folder = "data/Fahrzeugrouten"
         print("---- Clever Refuel Core ----", end="\n\n\n")
@@ -47,7 +49,7 @@ class Menu:
         return self.data_reader.get_route_data(selected_route)
 
     """
-    Fragt dem Nutzer wie er die gewaehlte Rute analysieren moechte.
+    Fragt dem Nutzer wie er die gewaehlte Route analysieren moechte.
     """
     def get_processing_type(self) -> pr.BaseProcessingType:
         print("---- Auswertungsverfahren Auswahl ----")

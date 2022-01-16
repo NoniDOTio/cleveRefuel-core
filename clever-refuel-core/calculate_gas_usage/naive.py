@@ -1,4 +1,6 @@
 from model.route_data import RouteData
+from model.tank_stop import TankStop
+from model.refuel_plan import RefuelPlan
 from calculate_gas_usage.distance_utils import distance_between
 from calculate_gas_usage.constants import GAS_PER_KILOMETER
 from forecast.base_forecast import BaseForecast
@@ -7,7 +9,9 @@ from forecast.base_forecast import BaseForecast
 """
 Durchläuft eine Fahrzeugroute und schlägt eine naive Tankstrategie vor
 """
-def calculate_naively(route: RouteData, forecast: BaseForecast) -> None:
+def calculate_naively(route: RouteData, forecast: BaseForecast) -> RefuelPlan:
+    approached_stops = []
+
     max_possible_distance = route.fuel_tank_size / GAS_PER_KILOMETER
     money_spent_on_refueling = 0
     total_refueled = 0
@@ -33,6 +37,7 @@ def calculate_naively(route: RouteData, forecast: BaseForecast) -> None:
             # Refuel to max tank capacity
             price_prediction = forecast.get_forecast_for(current_stop)
             amount_to_refuel = route.fuel_tank_size - current_fuel
+
         # Determine distance to destination
         km_to_destination = 0
         j = i
@@ -61,7 +66,12 @@ def calculate_naively(route: RouteData, forecast: BaseForecast) -> None:
 
             print("Refueling", round(amount_to_refuel, 2), "litres for", round(refuel_cost / 100, 2), "€")
 
+            current_stop.amount_to_refuel = amount_to_refuel
+            current_stop.predicted_price_per_liter = price_prediction
+            approached_stops.append(current_stop)
+
         current_fuel -= fuel_to_next_stop
         print("")
 
     print("Total refueled:", round(total_refueled, 2), "liters - Total money spend on refueling:", round(money_spent_on_refueling / 100, 2), "€")
+    return RefuelPlan(approached_stops)

@@ -5,6 +5,7 @@ from forecast.naive_forecast import NaiveForecasts
 from forecast.brandwide_forecast import BrandwideForecasts
 
 from calculate_gas_usage.fixed_path_gas_station_problem_algorithm import *
+from calculate_gas_usage.new_fixed_path_gas_station_problem_algorithm import *
 from calculate_gas_usage.naive import *
 
 """
@@ -65,5 +66,29 @@ class AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):
     def run(route_data: RouteData) -> bool:
         forecast = BrandwideForecasts()
 
-        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        temp = calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        for i in temp:
+            print(temp.amount_to_refuel)
+        return True
+
+
+"""
+"""
+class AnalyzeWithNewFixedPathGasStationProblem(BaseProcessingType):
+
+    def run(route_data: RouteData) -> bool:
+        forecast = NaiveForecasts()
+
+        calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        return True
+
+
+"""
+"""
+class AnalyzeBrandwideWithNewFixedPathGasStationProblem(BaseProcessingType):
+
+    def run(route_data: RouteData) -> bool:
+        forecast = BrandwideForecasts()
+
+        calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
         return True
