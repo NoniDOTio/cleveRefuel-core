@@ -23,7 +23,7 @@ class Menu:
         print("---- Clever Refuel Core ----", end="\n\n\n")
         route_data = self.get_route()
         print("\n\n")
-        processing_type = self.get_processing_type()
+        processing_type = (self.get_processing_type())()
 
         print("\n\n")
         print("---- Starte Analyze... ----", end="\n\n")

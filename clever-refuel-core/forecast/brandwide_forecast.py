@@ -32,11 +32,10 @@ class BrandwideForecasts(BaseForecast):
             print(f"Price Data not in cache, loading prices...")
             fuel_stations = self.data_reader.get_fuelstations_by_brand(brand)
             price_data = self.data_reader.get_all_fuelstations_data(fuel_stations['id'].tolist())
-            # TODO make the time casting ... faster
+
             print("\nBuilding time values...")
             price_data['hour'] = price_data['time'].apply(
-                lambda time: datetime.datetime.strptime(time + "00", '%Y-%m-%d %H:%M:%S%z'
-            ).hour)
+                lambda time: time.hour)
             self.brand_price_cache[brand] = price_data
             print(f"\nDone!")
             return self.brand_price_cache[brand]

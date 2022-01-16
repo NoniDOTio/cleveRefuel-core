@@ -1,5 +1,6 @@
 
 from abc import abstractmethod
+from data_reader import DataReader
 from model.route_data import RouteData
 from forecast.naive_forecast import NaiveForecasts
 from forecast.brandwide_forecast import BrandwideForecasts
@@ -14,8 +15,37 @@ Menupunkt dar der ausgefuehrt werden kann.
 """
 class BaseProcessingType:
     @abstractmethod
-    def run(route_data : RouteData) -> bool:
+    def run(self, route_data : RouteData) -> bool:
         return False
+
+    def show_prediction_percision(self, plan : RefuelPlan):
+        data_reader = DataReader()
+
+        total_price_predicted = 0
+        total_price_real = 0
+        print()
+        print()
+        print("---- Prediction Percision ----")
+        for stop in plan.stops:
+            refuel_amount = stop.amount_to_refuel
+            total_price_predicted += refuel_amount * stop.predicted_price_per_liter
+            real_price = refuel_amount * data_reader.get_fuelstation_price_data_at_time(stop.id, stop.timestamp)
+            total_price_real += real_price
+
+            print(f"Tankstop: {stop.meta.name}")
+            print(f"Predicted Price: {round(refuel_amount * stop.predicted_price_per_liter / 100, 2)}€")
+            print(f"     Real Price: {round(real_price / 100, 2)}€")
+            print()
+
+        diff = abs(round(total_price_real / 100, 2) - round(total_price_predicted / 100, 2))
+        print("---- Gesamt ---- ")
+        print()
+        print(f"Predicted Price: {round(total_price_predicted / 100, 2)}€")
+        print(f"     Real Price: {round(total_price_real / 100, 2)}€")
+        print()
+        print(f"Difference: {round(diff, 2)}€")
+        print()
+        print()
 
 """
 Analysiert die vom Nutzer gegebene Route mit einem Naiven Forecast auf naive
@@ -24,10 +54,11 @@ Tank nicht mehr bis zum naechsten Stop reicht
 """
 class AnalyzeWithNaiveForecastOnNaiveRoute(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
 
-        calculate_naively(route_data, forecast)
+        plan = calculate_naively(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
 
 """
@@ -37,10 +68,11 @@ Tank nicht mehr bis zum naechsten Stop reicht
 """
 class AnalyzeWithBrandwideForecastOnNaiveRoute(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = BrandwideForecasts()
 
-        calculate_naively(route_data, forecast)
+        plan = calculate_naively(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
 
 """
@@ -50,10 +82,11 @@ der Tankstelle an den optimalen Tankstellen getankt.
 """
 class AnalyzeWithFixedPathGasStationProblem(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
 
-        calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        plan = calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
 
 """
@@ -63,12 +96,11 @@ der Marke an den optimalen Tankstellen getankt.
 """
 class AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = BrandwideForecasts()
 
-        temp = calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
-        for i in temp:
-            print(temp.amount_to_refuel)
+        plan = calculate_using_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
 
 
@@ -76,10 +108,11 @@ class AnalyzeBrandwideWithFixedPathGasStationProblem(BaseProcessingType):
 """
 class AnalyzeWithNewFixedPathGasStationProblem(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = NaiveForecasts()
 
-        calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        plan = calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
 
 
@@ -87,8 +120,9 @@ class AnalyzeWithNewFixedPathGasStationProblem(BaseProcessingType):
 """
 class AnalyzeBrandwideWithNewFixedPathGasStationProblem(BaseProcessingType):
 
-    def run(route_data: RouteData) -> bool:
+    def run(self, route_data: RouteData) -> bool:
         forecast = BrandwideForecasts()
 
-        calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        plan = calculate_using_new_fixed_path_gas_station_problem_algorithm(route_data, forecast)
+        self.show_prediction_percision(plan)
         return True
