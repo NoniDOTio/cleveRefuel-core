@@ -90,7 +90,4 @@ def calculate_using_fixed_path_gas_station_problem_algorithm(route: RouteData, f
     print("Total refueled:", round(total_refueled, 2), "liters - Total money spend on refueling:",
           round(money_spent_on_refueling / 100, 2), "€")
 
-    for gas_station_id, data in optimal_stops:
-        approached_stops.append(route.stops[gas_station_id])
-
     return RefuelPlan(approached_stops)
