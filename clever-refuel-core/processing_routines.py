@@ -25,25 +25,25 @@ class BaseProcessingType:
         total_price_real = 0
         print()
         print()
-        print("---- Prediction Percision ----")
+        print("    ---- Prediction Percision ----")
         for stop in plan.stops:
             refuel_amount = stop.amount_to_refuel
             total_price_predicted += refuel_amount * stop.predicted_price_per_liter
             real_price = refuel_amount * data_reader.get_fuelstation_price_data_at_time(stop.id, stop.timestamp)
             total_price_real += real_price
 
-            print(f"Tankstop: {stop.meta.name}")
-            print(f"Predicted Price: {round(refuel_amount * stop.predicted_price_per_liter / 100, 2)}€")
-            print(f"     Real Price: {round(real_price / 100, 2)}€")
+            print(f"    Tankstop: {stop.meta.name}")
+            print(f"    Predicted Price: {round(refuel_amount * stop.predicted_price_per_liter / 100, 2)}€")
+            print(f"         Real Price: {round(real_price / 100, 2)}€")
             print()
 
         diff = abs(round(total_price_real / 100, 2) - round(total_price_predicted / 100, 2))
-        print("---- Gesamt ---- ")
+        print("    ---- Gesamt ---- ")
         print()
-        print(f"Predicted Price: {round(total_price_predicted / 100, 2)}€")
-        print(f"     Real Price: {round(total_price_real / 100, 2)}€")
+        print(f"    Predicted Price: {round(total_price_predicted / 100, 2)}€")
+        print(f"         Real Price: {round(total_price_real / 100, 2)}€")
         print()
-        print(f"Difference: {round(diff, 2)}€")
+        print(f"    Difference: {round(diff, 2)}€")
         print()
         print()
 
